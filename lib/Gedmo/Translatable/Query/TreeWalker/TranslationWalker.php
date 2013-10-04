@@ -76,6 +76,7 @@ class TranslationWalker extends SqlWalker
      * @var array
      */
     private $replacements = array();
+    private $replacementsCast = array();
 
     /**
      * List of joins for translated components in query
@@ -181,7 +182,7 @@ class TranslationWalker extends SqlWalker
     public function walkOrderByClause($orderByClause)
     {
         $result = parent::walkOrderByClause($orderByClause);
-        return $this->replace($this->replacements, $result);
+        return $this->replace($this->replacementsCast, $result);
     }
 
     /**
@@ -325,6 +326,8 @@ class TranslationWalker extends SqlWalker
                     ||  (!$this->needsFallback() && isset($config['fallback'][$field]) && $config['fallback'][$field])
                 ) {
                     $substituteField = 'COALESCE('.$substituteField.', '.$originalField.')';
+                    $this->replacementsCast[$originalField] = 'COALESCE(CAST('.$substituteField.' AS VARCHAR(8000)), '.$originalField.')';
+                    
                 }
 
                 $this->replacements[$originalField] = $substituteField;
