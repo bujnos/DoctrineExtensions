@@ -318,7 +318,7 @@ class TranslationWalker extends SqlWalker
                 // If original field is integer - treat translation as integer (for ORDER BY, WHERE, etc)
                 $fieldMapping = $meta->getFieldMapping($field);
                 if (in_array($fieldMapping["type"], array("integer", "bigint", "tinyint", "int"))) {
-                    $substituteField = 'CAST(' . $substituteField . ' AS SIGNED)';
+                    $substituteField = 'CAST(' . $substituteField . ' AS VARCHAR(8000))';
                 }
 
                 // Fallback to original if was asked for
